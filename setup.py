@@ -1,5 +1,6 @@
 import os
 import sys
+import sysconfig
 import numpy
 
 from setuptools import Command, Extension, setup
@@ -29,6 +30,21 @@ CFTIME_DIR = os.path.join(SRCDIR, NAME)
 CYTHON_FNAME = os.path.join(CFTIME_DIR, '_{}.pyx'.format(NAME))
 CYTHON_CNAME = os.path.join(CFTIME_DIR, '_{}.c'.format(NAME))
 
+USE_PY_LIMITED_API = (
+    # require opt-in (builds are specialized by default)
+    os.getenv('CFTIME_LIMITED_API', '0') == '1'
+    # Cython + numpy + limited API de facto requires Python >=3.11
+    and sys.version_info >= (3, 11)
+    # as of Python 3.14t, free-threaded builds don't support the limited API
+    and not sysconfig.get_config_var("Py_GIL_DISABLED")
+)
+ABI3_TARGET_VERSION = "".join(str(_) for _ in sys.version_info[:2])
+ABI3_TARGET_HEX = hex(sys.hexversion & 0xFFFF00F0)
+
+if USE_PY_LIMITED_API:
+    SETUP_OPTIONS = {"bdist_wheel": {"py_limited_api": f"cp{ABI3_TARGET_VERSION}"}}
+else:
+    SETUP_OPTIONS = {}
 
 class CleanCython(Command):
     description = 'Purge artifacts built by Cython'
@@ -59,6 +75,8 @@ if FLAG_COVERAGE in sys.argv or os.environ.get('CYTHON_COVERAGE', None):
     }
     DEFINE_MACROS += [('CYTHON_TRACE', '1'),
                      ('CYTHON_TRACE_NOGIL', '1')]
+    if USE_PY_LIMITED_API:
+        DEFINE_MACROS.append(("Py_LIMITED_API", ABI3_TARGET_HEX))
     if FLAG_COVERAGE in sys.argv:
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
@@ -70,7 +88,8 @@ else:
     ext_modules = [Extension('{}._{}'.format(NAME, NAME),
                   sources=[os.path.relpath(CYTHON_FNAME, BASEDIR)],
                   define_macros=DEFINE_MACROS,
-                  include_dirs=[numpy.get_include(),])]
+                  include_dirs=[numpy.get_include(),],
+                  py_limited_api=USE_PY_LIMITED_API,)]
     for e in ext_modules:
         e.cython_directives = {**{'language_level': "3"} ,  **COMPILER_DIRECTIVES}
     # remove _cftime.c file if it exists, so cython will recompile _cftime.pyx.
@@ -80,4 +99,5 @@ else:
 setup(
     cmdclass={'clean_cython': CleanCython},
     ext_modules=ext_modules,
+    options=SETUP_OPTIONS,
 )
