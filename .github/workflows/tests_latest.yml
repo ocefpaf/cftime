@@ -1,5 +1,10 @@
 name: Build and test with development python
-on: [push, pull_request]
+
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+
 jobs:
   build-linux:
     name: Python (${{ matrix.python-version }})
