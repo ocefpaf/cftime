@@ -125,6 +125,8 @@ test-command = [
     '''python -c "import cftime; print(f'cftime v{cftime.__version__}')"''',
     "python -m pytest -vv {package}/test"
 ]
-manylinux-x86_64-image = "manylinux2014"
-manylinux-aarch64-image = "manylinux2014"
+#manylinux-x86_64-image = "manylinux2014"
+#manylinux-aarch64-image = "manylinux2014"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
 environment = { CFTIME_LIMITED_API = "1" }
