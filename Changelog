@@ -1,5 +1,5 @@
-version 1.6.6 (not yet released)
-================================
+version 1.6.6 (release tag v1.6.6rel)
+=====================================
 * added new CF calendar "tai", which is the same as proleptic_gregorian but is only
   valid for dates after 1958-01-01.
 

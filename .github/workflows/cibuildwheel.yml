@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
           - os: windows-2022
             arch: AMD64
@@ -66,7 +66,7 @@ jobs:
 
   build_sdist:
     name: Build source distribution
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -82,13 +82,14 @@ jobs:
         with:
           name: pypi-artifacts
           path: ${{ github.workspace }}/dist/*.tar.gz
+
     permissions:
       actions: write
 
   publish-artifacts-pypi:
     needs: [build_bdist, build_sdist]
     name: "Publish to PyPI"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
