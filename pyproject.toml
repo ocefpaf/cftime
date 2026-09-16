@@ -36,7 +36,6 @@ dev = [
     "cython>=0.29.20",
     "pytest",
     "sphinx",
-    "twine",
 ]
 
 [build-system]
