@@ -20,13 +20,14 @@ classifiers = [
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: 3.14',
+    'Programming Language :: Python :: 3.15',
     'Topic :: Scientific/Engineering',
 ]
 dependencies = [
     "numpy>=2.3.0; platform_system == 'Windows' and platform_machine == 'ARM64'",
     "numpy>=1.21.2; platform_system != 'Windows' or platform_machine != 'ARM64'",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [dependency-groups]
 dev = [
@@ -113,6 +114,7 @@ skip = [
     "*musllinux_aarch64*",
     # Skipped due to unavailability of Python binary and NumPy for Win-ARM64
     "cp310-win_arm64",
+    "cp315t-*",
 ]
 
 test-skip = [

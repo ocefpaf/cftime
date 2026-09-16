@@ -46,7 +46,7 @@ jobs:
         echo "CIBW_SKIP=$CIBW_SKIP" >> $GITHUB_ENV
         echo "Setting CIBW_SKIP=$CIBW_SKIP"
 
-        CIBW_TEST_SKIP="cp312-* cp313-*"
+        CIBW_TEST_SKIP="cp312-* cp315-*"
         echo "CIBW_TEST_SKIP=$CIBW_TEST_SKIP" >> $GITHUB_ENV
         echo "Setting CIBW_TEST_SKIP=$CIBW_TEST_SKIP"
 
