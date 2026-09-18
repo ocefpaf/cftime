@@ -3,7 +3,7 @@ name: TESTS
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [ master ]
 
 # Deny all permissions by default
 permissions: {}
@@ -16,10 +16,6 @@ jobs:
       matrix:
         python-version: [ "3.11", "3.15-dev" ]
         os: [ windows-latest, ubuntu-latest, macos-latest, macos-15-intel ]
-        platform: [x64, x32]
-        exclude:
-          - os: macos-latest  
-            platform: x32
 
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
